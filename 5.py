@@ -1,6 +1,6 @@
 import serial
 import time
-lenghts = {'s':3, 'u':0,'d':0,'b':0}
+lenghts = {'s':3, 'u':0,'d':0,'l':0}
 values = []
 
 def get_connection(port):
@@ -20,7 +20,7 @@ def send(ser,message, mesg_len):
 if __name__ == '__main__':
     ser = get_connection("COM12")
     while True:
-        print("Введите одну из команд: \nu - включить светодиод, \nd - выключить светодиод, \nauto - включение/выключение светодиода по показаниям датчика, \nrec - включить поточную передачу данных с датчика, \nb - регулировать яркость светодиода в зависимости от освещенности")      
+        print("Ввести одну из команд: \nu - включить светодиод, \nd - выключить светодиод, \nauto - включение/выключение светодиода по показаниям датчика, \nrec - включить поточную передачу данных с датчика, \nl - регулировать яркость светодиода в зависимости от освещенности")      
         inp = input()
         if inp == "u" or inp == "d" :
             send(ser, inp.encode(), lenghts[inp])
@@ -42,7 +42,7 @@ if __name__ == '__main__':
                 if val:
                     values.append(val)
                 print (values)
-        elif inp == "b":
+        elif inp == "l":
             while True: 
                 com = "s"
                 val = send(ser, com.encode(), lenghts[com])
@@ -50,10 +50,10 @@ if __name__ == '__main__':
                     val = int(val)
                     print(val)
                     if val > 900:
-                        send(ser, 'b'.encode(), 0)
+                        send(ser, 'l'.encode(), 0)
                         brightness = send(ser, '50'.encode(),1)
                     else:
-                        send(ser, 'b'.encode(), 0)
+                        send(ser, 'l'.encode(), 0)
                         brightness = send(ser, '255'.encode(),1)
         else:
             print("Неизваестная команда")
